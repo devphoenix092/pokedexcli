@@ -24,7 +24,20 @@ func startRepl() {
 		command, exists := commands.GetCommands()[commandName]
 
 		if exists {
-			err := command.Callback()
+			var err error
+			if commandName == "explore" {
+				if len(words) == 1 {
+					fmt.Println("The location area cannot be an empty string.")
+					continue
+				} else {
+					err = command.Callback(commands.ParamType{
+						Area: words[1],
+					})
+				}
+			} else {
+				err = command.Callback(commands.ParamType{})
+			}
+
 			if err != nil {
 				fmt.Println(err)
 			}

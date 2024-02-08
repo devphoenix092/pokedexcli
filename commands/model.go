@@ -3,19 +3,27 @@ package commands
 type CommandType struct {
 	Name        string
 	Description string
-	Callback    func() error
+	Callback    func(param ParamType) error
 }
 
 type LocationType struct {
 	Name string `json:"name"`
-	Url  string `json:"url"`
 }
 
 type LocationResType struct {
-	Count    int            `json:"count"`
-	Next     string         `json:"next"`
-	Previous string         `json:"previous"`
-	Results  []LocationType `json:"results"`
+	Results []LocationType `json:"results"`
+}
+
+type LocationAreaType struct {
+	Pokemon LocationType `json:"pokemon"`
+}
+
+type LocationAreaResType struct {
+	PokemonEncounters []LocationAreaType `json:"pokemon_encounters"`
+}
+
+type ParamType struct {
+	Area string
 }
 
 func GetCommands() map[string]CommandType {
@@ -39,6 +47,11 @@ func GetCommands() map[string]CommandType {
 			Name:        "mapb",
 			Description: "Display the previous 20 locations",
 			Callback:    CommandMapb,
+		},
+		"explore": {
+			Name:        "explore",
+			Description: "Display a list of all the Pokémon in a given area",
+			Callback:    CommandExplore,
 		},
 	}
 }

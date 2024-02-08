@@ -2,7 +2,7 @@ package commands
 
 import "os"
 
-func CommandExit() error {
+func CommandExit(param ParamType) error {
 	os.Exit(0)
 	return nil
 }

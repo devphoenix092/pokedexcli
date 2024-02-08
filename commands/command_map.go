@@ -11,9 +11,9 @@ import (
 	"strconv"
 )
 
-func CommandMap() error {
+func CommandMap(param ParamType) error {
 	// Make api
-	api := utils.LOCATION_API + "?offset=" + strconv.Itoa(config.Offset.Next) + "&limit=" + strconv.Itoa(utils.LIMIT)
+	api := utils.POKE_API.Location + "?offset=" + strconv.Itoa(config.Offset.Next) + "&limit=" + strconv.Itoa(utils.LIMIT)
 
 	// Check cache
 	val, isExists := cache.Get(api)

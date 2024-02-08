@@ -6,3 +6,4 @@
 2. task2 - Help/Exit command
 3. task3 - Map/Mapb command
 4. task4 - Cache
+5. task5 - Explore command

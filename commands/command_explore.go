@@ -6,20 +6,12 @@ import (
 	"io"
 	"net/http"
 	"pokedexcli/cache"
-	"pokedexcli/config"
 	"pokedexcli/utils"
-	"strconv"
 )
 
-func CommandMapb(param ParamType) error {
-	// Change config
-	if config.Offset.Previous != 0 {
-		config.Offset.Next -= utils.LIMIT
-		config.Offset.Previous -= utils.LIMIT
-	}
-
+func CommandExplore(param ParamType) error {
 	// Make api
-	api := utils.POKE_API.Location + "?offset=" + strconv.Itoa(config.Offset.Previous) + "&limit=" + strconv.Itoa(utils.LIMIT)
+	api := utils.POKE_API.LocationArea + "/" + param.Area
 
 	// Check cache
 	val, isExists := cache.Get(api)
@@ -41,16 +33,23 @@ func CommandMapb(param ParamType) error {
 	}
 
 	// json decode
-	apiRes := LocationResType{}
+	apiRes := LocationAreaResType{}
 	err := json.Unmarshal(val, &apiRes)
 	if err != nil {
 		return err
 	}
 
 	// Get location name
-	for _, location := range apiRes.Results {
-		fmt.Printf("%s\n", location.Name)
+	fmt.Println("Exploring pastoria-city-area...")
+	if len(apiRes.PokemonEncounters) != 0 {
+		fmt.Println("Found Pokemon:")
+		for _, location := range apiRes.PokemonEncounters {
+			fmt.Printf("%s\n", location.Pokemon.Name)
+		}
+	} else {
+		fmt.Println("Not Found Pokemon:")
 	}
+
 	fmt.Println()
 
 	return nil
