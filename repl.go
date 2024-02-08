@@ -25,14 +25,20 @@ func startRepl() {
 
 		if exists {
 			var err error
-			if commandName == "explore" {
+			if commandName == "explore" || commandName == "catch" {
 				if len(words) == 1 {
-					fmt.Println("The location area cannot be an empty string.")
+					fmt.Println("The second parameter cannot be an empty string.")
 					continue
 				} else {
-					err = command.Callback(commands.ParamType{
-						Area: words[1],
-					})
+					if commandName == "explore" {
+						err = command.Callback(commands.ParamType{
+							Area: words[1],
+						})
+					} else {
+						err = command.Callback(commands.ParamType{
+							PokemonName: words[1],
+						})
+					}
 				}
 			} else {
 				err = command.Callback(commands.ParamType{})

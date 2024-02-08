@@ -23,7 +23,13 @@ type LocationAreaResType struct {
 }
 
 type ParamType struct {
-	Area string
+	Area        string
+	PokemonName string
+}
+
+type PokemonResType struct {
+	Name           string `json:"name"`
+	BaseExperience int    `json:"base_experience"`
 }
 
 func GetCommands() map[string]CommandType {
@@ -52,6 +58,11 @@ func GetCommands() map[string]CommandType {
 			Name:        "explore",
 			Description: "Display a list of all the Pokémon in a given area",
 			Callback:    CommandExplore,
+		},
+		"catch": {
+			Name:        "catch",
+			Description: "Catching Pokemon",
+			Callback:    CommandCatch,
 		},
 	}
 }

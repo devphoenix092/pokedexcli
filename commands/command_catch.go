@@ -4,22 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"pokedexcli/cache"
 	"pokedexcli/storage"
 	"pokedexcli/utils"
-	"strconv"
 )
 
-func CommandMapb(param ParamType) error {
-	// Change config
-	if storage.Offset.Previous != 0 {
-		storage.Offset.Next -= utils.LIMIT
-		storage.Offset.Previous -= utils.LIMIT
-	}
-
+func CommandCatch(param ParamType) error {
 	// Make api
-	api := utils.POKE_API.Location + "?offset=" + strconv.Itoa(storage.Offset.Previous) + "&limit=" + strconv.Itoa(utils.LIMIT)
+	api := utils.POKE_API.Pokemon + "/" + param.PokemonName
 
 	// Check cache
 	val, isExists := cache.Get(api)
@@ -41,16 +35,25 @@ func CommandMapb(param ParamType) error {
 	}
 
 	// json decode
-	apiRes := LocationResType{}
+	apiRes := PokemonResType{}
 	err := json.Unmarshal(val, &apiRes)
 	if err != nil {
 		return err
 	}
 
 	// Get location name
-	for _, location := range apiRes.Results {
-		fmt.Printf("%s\n", location.Name)
+	fmt.Println("Throwing a Pokeball at", param.PokemonName, "...")
+
+	if rand.Intn(utils.CHANCE_LIMIT) > apiRes.BaseExperience {
+		fmt.Println(param.PokemonName, "was caught!")
+		pokemon := storage.PokemonType{
+			Name: apiRes.Name,
+		}
+		storage.PokemonList = append(storage.PokemonList, pokemon)
+	} else {
+		fmt.Println(param.PokemonName, "escaped!")
 	}
+
 	fmt.Println()
 
 	return nil

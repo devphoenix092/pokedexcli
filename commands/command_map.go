@@ -6,14 +6,14 @@ import (
 	"io"
 	"net/http"
 	"pokedexcli/cache"
-	"pokedexcli/config"
+	"pokedexcli/storage"
 	"pokedexcli/utils"
 	"strconv"
 )
 
 func CommandMap(param ParamType) error {
 	// Make api
-	api := utils.POKE_API.Location + "?offset=" + strconv.Itoa(config.Offset.Next) + "&limit=" + strconv.Itoa(utils.LIMIT)
+	api := utils.POKE_API.Location + "?offset=" + strconv.Itoa(storage.Offset.Next) + "&limit=" + strconv.Itoa(utils.LIMIT)
 
 	// Check cache
 	val, isExists := cache.Get(api)
@@ -48,11 +48,11 @@ func CommandMap(param ParamType) error {
 	fmt.Println()
 
 	// Change config
-	if config.Offset.Previous == 0 && config.Offset.Next == 0 {
-		config.Offset.Next = utils.LIMIT
+	if storage.Offset.Previous == 0 && storage.Offset.Next == 0 {
+		storage.Offset.Next = utils.LIMIT
 	} else {
-		config.Offset.Next += utils.LIMIT
-		config.Offset.Previous += utils.LIMIT
+		storage.Offset.Next += utils.LIMIT
+		storage.Offset.Previous += utils.LIMIT
 	}
 
 	return nil
