@@ -35,7 +35,7 @@ func CommandCatch(param ParamType) error {
 	}
 
 	// json decode
-	apiRes := PokemonResType{}
+	apiRes := storage.PokemonType{}
 	err := json.Unmarshal(val, &apiRes)
 	if err != nil {
 		return err
@@ -44,11 +44,17 @@ func CommandCatch(param ParamType) error {
 	// Get location name
 	fmt.Println("Throwing a Pokeball at", param.PokemonName, "...")
 
-	if rand.Intn(utils.CHANCE_LIMIT) > apiRes.BaseExperience {
+	chanceValue := rand.Intn(utils.CHANCE_LIMIT)
+	if chanceValue > apiRes.BaseExperience {
 		fmt.Println(param.PokemonName, "was caught!")
 		pokemon := storage.PokemonType{
-			Name: apiRes.Name,
+			Name:   apiRes.Name,
+			Height: apiRes.Height,
+			Weight: apiRes.Weight,
+			Stats:  apiRes.Stats,
+			Types:  apiRes.Types,
 		}
+
 		storage.PokemonList = append(storage.PokemonList, pokemon)
 	} else {
 		fmt.Println(param.PokemonName, "escaped!")

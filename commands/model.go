@@ -1,21 +1,19 @@
 package commands
 
+import "pokedexcli/storage"
+
 type CommandType struct {
 	Name        string
 	Description string
 	Callback    func(param ParamType) error
 }
 
-type LocationType struct {
-	Name string `json:"name"`
-}
-
 type LocationResType struct {
-	Results []LocationType `json:"results"`
+	Results []storage.NameType `json:"results"`
 }
 
 type LocationAreaType struct {
-	Pokemon LocationType `json:"pokemon"`
+	Pokemon storage.NameType `json:"pokemon"`
 }
 
 type LocationAreaResType struct {
@@ -25,11 +23,6 @@ type LocationAreaResType struct {
 type ParamType struct {
 	Area        string
 	PokemonName string
-}
-
-type PokemonResType struct {
-	Name           string `json:"name"`
-	BaseExperience int    `json:"base_experience"`
 }
 
 func GetCommands() map[string]CommandType {
@@ -63,6 +56,11 @@ func GetCommands() map[string]CommandType {
 			Name:        "catch",
 			Description: "Catching Pokemon",
 			Callback:    CommandCatch,
+		},
+		"inspect": {
+			Name:        "inspect",
+			Description: "Inspect Pokemon",
+			Callback:    CommandInspect,
 		},
 	}
 }

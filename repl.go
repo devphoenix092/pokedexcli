@@ -25,7 +25,7 @@ func startRepl() {
 
 		if exists {
 			var err error
-			if commandName == "explore" || commandName == "catch" {
+			if commandName == "explore" || commandName == "catch" || commandName == "inspect" {
 				if len(words) == 1 {
 					fmt.Println("The second parameter cannot be an empty string.")
 					continue

@@ -8,3 +8,4 @@
 4. task4 - Cache
 5. task5 - Explore command
 6. task6 - Catch command
+7. task7 - Inspect command
