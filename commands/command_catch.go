@@ -41,23 +41,34 @@ func CommandCatch(param ParamType) error {
 		return err
 	}
 
-	// Get location name
-	fmt.Println("Throwing a Pokeball at", param.PokemonName, "...")
-
-	chanceValue := rand.Intn(utils.CHANCE_LIMIT)
-	if chanceValue > apiRes.BaseExperience {
-		fmt.Println(param.PokemonName, "was caught!")
-		pokemon := storage.PokemonType{
-			Name:   apiRes.Name,
-			Height: apiRes.Height,
-			Weight: apiRes.Weight,
-			Stats:  apiRes.Stats,
-			Types:  apiRes.Types,
+	isCatched := false
+	for _, item := range storage.PokemonList {
+		if item.Name == param.PokemonName {
+			isCatched = true
 		}
+	}
 
-		storage.PokemonList = append(storage.PokemonList, pokemon)
+	if !isCatched {
+		fmt.Println("Throwing a Pokeball at", param.PokemonName, "...")
+
+		chanceValue := rand.Intn(utils.CHANCE_LIMIT)
+		if chanceValue > apiRes.BaseExperience {
+			fmt.Println(param.PokemonName, "was caught!")
+			fmt.Println(param.PokemonName, "You may now inspect it with the inspect command.")
+			pokemon := storage.PokemonType{
+				Name:   apiRes.Name,
+				Height: apiRes.Height,
+				Weight: apiRes.Weight,
+				Stats:  apiRes.Stats,
+				Types:  apiRes.Types,
+			}
+
+			storage.PokemonList = append(storage.PokemonList, pokemon)
+		} else {
+			fmt.Println(param.PokemonName, "escaped!")
+		}
 	} else {
-		fmt.Println(param.PokemonName, "escaped!")
+		fmt.Println("You have already caught this pokemon.")
 	}
 
 	fmt.Println()
